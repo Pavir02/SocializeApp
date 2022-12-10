@@ -55,7 +55,6 @@ namespace API.Controllers
             return  await _context.Users.AnyAsync(x=> x.UserName.ToLower() == userName.ToLower());
         }
 
-
         [HttpPost("login")]
         public async Task<ActionResult<UserDTO>> Login(LoginDTO loginDTO) 
         {
