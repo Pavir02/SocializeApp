@@ -14,8 +14,6 @@ export class AccountService {
 
   constructor(private http:HttpClient) { }
 
-
-
 register(model:any)
 {
  return this.http.post<User>(this.baseUrl+"account/register", model).pipe(
