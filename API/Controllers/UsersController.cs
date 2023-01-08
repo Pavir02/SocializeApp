@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Authorize]
+
     public class UsersController : BaseApiController
     {
         private readonly IUserRepository _userRepository;
@@ -24,11 +24,12 @@ namespace API.Controllers
     {
       // IEnumerable<AppUser> users =  await _userRepository.GetUsersAsync();
       // var usersToReturn =  _mapper.Map<IEnumerable<MemberDTO>>(users);
+      // return Ok(usersToReturners);
       var users = await _userRepository.GetMembersAsync();
       return Ok(users);
     }
 
-    [Authorize]
+    
     [HttpGet("{userName}")]
     public async Task<ActionResult<MemberDTO>> GetUser(string userName)
     {
