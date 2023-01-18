@@ -34,9 +34,8 @@ galleryImages : NgxGalleryImage[] = [];
 
   getImages() {
     if(!this.member) return [] ;
+    
     const imageUrls = [];
-
-
     for(const photo of this.member.photos){
       imageUrls.push({
         small : photo.url,
