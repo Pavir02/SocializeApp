@@ -27,7 +27,7 @@ var builder = WebApplication.CreateBuilder(args);
     //     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPIv5 v1"));
     // }
  
-    app.UseHttpsRedirection(); //http requests will be redirected to https
+    //app.UseHttpsRedirection(); //http requests will be redirected to https
     app.UseRouting(); //To setup routing mechanism
     app.UseCors(x=> x.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
     app.UseAuthentication();
