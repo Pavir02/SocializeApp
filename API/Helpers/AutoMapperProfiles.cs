@@ -13,16 +13,25 @@ namespace API.Helpers
             //configuring automapper to shape the data as we want/ map specific property
             //map the Url of the main photo form the AppUser to PhotoUrl in MemberDTO
             CreateMap<AppUser,MemberDTO>()
-            .ForMember(memberDto => memberDto.PhotoUrl,   
-                options => options.MapFrom(appuser =>
-                appuser.Photos.FirstOrDefault(x=>x.IsMain == true).Url))
-            .ForMember(memberDto => memberDto.Age,
-                options => options.MapFrom(appuser => 
-                appuser.DateOfBirth.CalculateAge())) ;
+            .ForMember(dest => dest.PhotoUrl,   
+                    options => options.MapFrom(source => source.Photos.FirstOrDefault(x => x.IsMain).Url))
+            .ForMember(dest => dest.Age,
+                    options => options.MapFrom(source => source.DateOfBirth.CalculateAge())) ;
 
             CreateMap<Photo, PhotoDTO>();   
-            CreateMap<MemberUpdateDTO, AppUser>();   
-            CreateMap<RegisterDTO, AppUser>();      
+
+            CreateMap<MemberUpdateDTO, AppUser>();  
+
+            CreateMap<RegisterDTO, AppUser>(); 
+
+            CreateMap<Message, MessageDTO>()
+            .ForMember(dest => dest.SenderPhotoUrl,
+                    options => options.MapFrom(source => 
+                                source.Sender.Photos.FirstOrDefault(x => x.IsMain).Url))
+            .ForMember(dest => dest.RecipientPhototUrl,
+                    options => options.MapFrom(source => 
+                                source.Recipient.Photos.FirstOrDefault(x=> x.IsMain).Url));    
+                
         }
     }
 }
