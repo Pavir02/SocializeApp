@@ -40,7 +40,9 @@ namespace API.Data
                 // user.PasswordSalt = hmac.Key;
                 //context.Users.Add(user);
                 await userManager.CreateAsync(user, "Passw0rd");
-                await userManager.AddToRoleAsync(user,"Member");                
+                await userManager.AddToRoleAsync(user,"Member");
+                var initialPhoto = user.Photos.FirstOrDefault(x=>x.IsMain);
+                initialPhoto.IsApproved = true;               
             }
 
             var admin = new AppUser 

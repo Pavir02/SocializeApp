@@ -57,8 +57,8 @@ namespace API.Controllers
         {
             // AppUser user = await _uow.UserRepository.GetUserByUserNameAsync(userName);
             // return _mapper.Map<MemberDTO>(user);
-
-            return await _uow.UserRepository.GetMemberAsync(userName);
+            var CurrentUserName =User.GetUserName();
+            return await _uow.UserRepository.GetMemberAsync(userName, isCurrentUser:CurrentUserName==userName);
         }
 
         [HttpPut]
@@ -88,10 +88,11 @@ namespace API.Controllers
             var photo = new Photo
             {
                 Url = result.SecureUrl.AbsoluteUri,
-                PublicId = result.PublicId
+                PublicId = result.PublicId,
+                IsApproved = false
             };
 
-            if (user.Photos.Count == 0) photo.IsMain = true;
+            //if (user.Photos.Count == 0) photo.IsMain = true;
             user.Photos.Add(photo);
 
             if (await _uow.Complete())
@@ -124,7 +125,6 @@ namespace API.Controllers
 
             if (await _uow.Complete()) return NoContent();
             return BadRequest();
-
         }
 
 

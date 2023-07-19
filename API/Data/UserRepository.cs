@@ -29,6 +29,7 @@ namespace API.Data
         {
             return await _context.Users
             .Include(x=>x.Photos)
+            .IgnoreQueryFilters()
             .SingleOrDefaultAsync(x => x.UserName == username);
         }
 
@@ -36,6 +37,7 @@ namespace API.Data
         {
             return await _context.Users
             .Include(x=> x.Photos) 
+            .IgnoreQueryFilters()
             .ToListAsync();
         }
 
@@ -62,7 +64,7 @@ namespace API.Data
                userParams.PageNumber, userParams.PageSize);            
         }
 
-         public async Task<MemberDTO> GetMemberAsync(string username)
+         public async Task<MemberDTO> GetMemberAsync(string username, bool isCurrentUser)
         {
             //  return await _context.Users.Where(x=>x.UserName == username)
             //  .Select(user => new MemberDTO
@@ -71,9 +73,14 @@ namespace API.Data
             //     UserName = user.UserName
             //  }).SingleOrDefaultAsync();
 
-            return await _context.Users.Where(x=>x.UserName == username)
-            .ProjectTo<MemberDTO>(_mapper.ConfigurationProvider)
-            .SingleOrDefaultAsync();
+            var  query = _context.Users.Where(x=>x.UserName == username)            
+            .ProjectTo<MemberDTO>(_mapper.ConfigurationProvider);
+            
+            if(isCurrentUser) 
+            {
+                query = query.IgnoreQueryFilters();   
+            }         
+            return await query.SingleOrDefaultAsync();
         }
 
 
@@ -92,6 +99,25 @@ namespace API.Data
             return await _context.Users
                 .Where(x=>x.UserName == username)
                 .Select(x=>x.Gender).FirstOrDefaultAsync();
+        }
+
+        public async Task<AppUser> GetUserByPhotoIdAsync(int photoId)
+        {
+            var photo = await _context.Photos.IgnoreQueryFilters()
+            .FirstOrDefaultAsync(x=>x.Id == photoId); 
+            
+            return await _context.Users  
+            .Include(x => x.Photos)          
+            .Where(x => x.Photos.Contains(photo))
+            .IgnoreQueryFilters()
+            .FirstOrDefaultAsync();
+
+            // return await _context.Users
+            // .Include(p => p.Photos)
+            // .IgnoreQueryFilters()
+            // .Where(p => p.Photos.Any(p => p.Id == photoId))
+            // .FirstOrDefaultAsync();
+
         }
 
     }

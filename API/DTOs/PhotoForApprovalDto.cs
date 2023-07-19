@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace API.DTOs
 {
-    public class PhotoDTO
+    public class PhotoForApprovalDto
     {
         public int Id { get; set; }  
         public string Url { get; set; } 
